@@ -1,4 +1,4 @@
-package OSCAR::opd2;
+package OSCAR::ORM;
 
 # Copyright (C) 2007    Oak Ridge National Laboratory
 #                       Geoffroy Vallee <valleegr@ornl.gov>

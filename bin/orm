@@ -1,8 +1,8 @@
 #!/usr/bin/env perl
 #
-# Copyright (c) 2007, Oak Ridge National Laboratory.
-#                     Geoffroy R. Vallee <valleegr@ornl.gov>
-#                     All rights reserved.
+# Copyright (c) 2007-2008, Oak Ridge National Laboratory.
+#                          Geoffroy R. Vallee <valleegr@ornl.gov>
+#                          All rights reserved.
 # Copyright (c) 2003, The Board of Trustees of the University of Illinois.
 #                     All rights reserved.
 # Copyright (c) 2002-2003 The Trustees of Indiana University.
@@ -15,12 +15,17 @@
 # $Id$
 #
 
+BEGIN {
+    if (defined $ENV{OSCAR_HOME}) {
+        unshift @INC, "$ENV{OSCAR_HOME}/lib";
+    }
+}
+
 use strict;
 use Carp;
-use lib "$ENV{OSCAR_HOME}/lib";
 use Term::ReadLine;
 use Getopt::Long;
-use OSCAR::opd2 qw(
+use OSCAR::ORM qw(
                     add_repo_to_cache
                     flush_cache
                     get_available_opkgs
@@ -34,14 +39,16 @@ use OSCAR::opd2 qw(
                     list_included_opkgs
                   );
 use OSCAR::Utils qw (print_array);
+use Data::Dumper;
 
 my $repository_listing;
 my $repository_selected = -1;
 our $selected_repo = "";
 my $package_listing;
-my $verbose = $ENV{OPD_VERBOSE};
+my $verbose = $ENV{ORM_VERBOSE};
 
-my ($interactive, @repos, $default_repo, $list_default_repos, $list_repos);
+my ($interactive, @repos, $default_repo, $list_default_repos, $list_repos,
+    $distro, $search, $show);
 
 Getopt::Long::Configure("pass_through");
 GetOptions(
@@ -49,9 +56,12 @@ GetOptions(
         "default-opkgs"         => \$default_repo,
         "list-default-repos"    => \$list_default_repos,
         "repo=s"                => \@repos,
+        "distro=s"              => \$distro,
+        "search=s"              => \$search,
+        "show=s"                => \$show,
         "list-repos"            => \$list_repos,
         "help"                  => \&help,
-        );
+        ) || help_and_die();
 
 my $opd_term = new Term::ReadLine 'OPD';
 
@@ -223,7 +233,7 @@ if ($interactive) {
 
 init_opd();
 
-if ($interactive || $list_default_repos) {
+if ($interactive) {
     if ($list_default_repos) {
         my @list = get_default_repositories ();
         # Then we print the result. Remember that the output is used by
@@ -232,6 +242,30 @@ if ($interactive || $list_default_repos) {
             print "$item ";
         }
         print "\n";
+        exit (0);
+    }
+    if ($search) {
+        print "Search for $search for $distro...\n";
+        require OSCAR::RepositoryManager;
+        my $rm = OSCAR::RepositoryManager->new (distro=>$distro);
+        if (!defined $rm) {
+            die "ERROR: Impossible to create a RepositoryManager object";
+        }
+        my ($rc, @output) = $rm->search_opkgs ($search);
+        print join ("", @output);
+        exit (0);
+    }
+    if ($show) {
+        print "Search for $show for $distro...\n";
+        require OSCAR::RepositoryManager;
+        my $rm = OSCAR::RepositoryManager->new (distro=>$distro);
+        if (!defined $rm) {
+            die "ERROR: Impossible to create a RepositoryManager object";
+        }
+        my ($rc, %output) = $rm->show_opkg ($show);
+        print "----> [ORM] Packages details:\n";
+        print Dumper (%output);
+        print "----> [ORM] end.\n";
         exit (0);
     }
     if ($list_repos) {
@@ -247,9 +281,8 @@ if ($interactive || $list_default_repos) {
     if ($default_repo) {
         @repos = get_default_repositories ();
     }
-    if (!defined @repos) {
-        print "Error: you must specify a repository\n";
-        exit -1;
+    if (!defined @repos && !defined $distro) {
+        die "ERROR: you must specify a repository or a distro id\n";
     } else {
         my @list = ();
         foreach my $repo (@repos) {
@@ -270,7 +303,12 @@ if ($interactive || $list_default_repos) {
     main_menu();
 }
 
-sub help {
+sub help_and_die () {
+    help();
+    exit 1;
+}
+
+sub help ($) {
     print "Usage: $0 OPTIONS\n";
     print "\n";
     print "Call the OPD2 command line, both a interactive and a non-interactive".

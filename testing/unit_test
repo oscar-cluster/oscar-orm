@@ -1,0 +1,14 @@
+#!/usr/bin/perl
+#
+
+use strict;
+use OSCAR::RepositoryManager;
+use warnings "all";
+
+my $rm = OSCAR::RepositoryManager->new (distro=>"ubuntu-7-i386");
+if (!defined $rm) {
+    die "ERROR: Impossible to create a RepositoryManager object";
+}
+print $rm->status();
+
+exit 0;
