@@ -1,3 +1,7 @@
-1.0 (not yet released):
+1.1 (not yet released):
+- Add the automatic generation and installation of man pages for all ORM
+scripts.
+
+1.0:
 - Separate ORM from the rest of the OSCAR code.
 
