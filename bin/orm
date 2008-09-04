@@ -338,31 +338,29 @@ __END__
 
 =head1 NAME
 
-opd2, a tool for OSCAR package management (OSCAR Package Downloader). It enables
+orm, a tool for OSCAR package management (OSCAR Package Downloader). It enables
 the management OSCAR packages via repositories when managing clusters.
 
 =head1 SYNOPSIS
 
-opd2 [--non-interactive] [--default-opkgs] [--list-default-repos] [--repo <URL>] 
+orm [--non-interactive] [--default-opkgs] [--list-default-repos] [--repo <URL>] 
      [--list-repos] [--help]
 
 =head1 DESCRIPTION
 
-OPD2 (OSCAR Package Downloader 2) is a tool for the management of OSCAR 
-packages. Since OPD2 is designed to work with OPKGC (the OSCAR Package
-Downloader), OPD2 does not actually download packages; packages are managed
-via repositories (Yum or APT repositories).
-OPD2 can work in two different modes: (i) the interactive mode and (ii) the
+ORM (OSCAR Repository Manager) is a tool for the management of OSCAR 
+repositories. 
+ORM can work in two different modes: (i) the interactive mode and (ii) the
 non-interactive mode. In non-interactive mode, users have to specify options 
-when using the command line. In interactive mode, OPD2 gives a prompt to the
-user how can then use ODP2 commands (for more information, type the help
+when using the command line. In interactive mode, ORM gives a prompt to the
+user how can then use ORM commands (for more information, type the help
 command).
 
 =head1 OPTIONS
 
 Supported options include:
 
-=over 6
+=over 8
 
 =item --non-interactive
 
@@ -396,11 +394,14 @@ Some help information.
 
 =head1 AUTHOR
 
-Geoffroy Vallee, valleegr@ornl.gov
-Jeff Squyres
+=item Geoffroy Vallee <valleegr@ornl.gov>
+
+=item Jeff Squyres
 
 =head1 SEE ALSO
 
-perl(1)
+perl(1),
+perldoc OSCAR::RepositoryManager,
+perldoc OSCAR::PackMam
 
 =cut
