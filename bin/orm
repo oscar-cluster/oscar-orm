@@ -48,15 +48,17 @@ my $package_listing;
 my $verbose = $ENV{ORM_VERBOSE};
 
 my ($interactive, @repos, $default_repo, $list_default_repos, $list_repos,
-    $distro, $search, $show);
+    $distro, $search, $show, $install, $chroot);
 
 Getopt::Long::Configure("pass_through");
 GetOptions(
         "non-interactive"       => \$interactive, 
         "default-opkgs"         => \$default_repo,
+        "chroot=s"              => \$chroot,
+        "distro=s"              => \$distro,
+        "install=s"             => \$install,
         "list-default-repos"    => \$list_default_repos,
         "repo=s"                => \@repos,
-        "distro=s"              => \$distro,
         "search=s"              => \$search,
         "show=s"                => \$show,
         "list-repos"            => \$list_repos,
@@ -266,6 +268,21 @@ if ($interactive) {
         print "----> [ORM] Packages details:\n";
         print Dumper (%output);
         print "----> [ORM] end.\n";
+        exit (0);
+    }
+    if ($install) {
+        if (!defined $install || !defined $chroot || !defined $distro) {
+            die "ERROR: Invalid parameters";
+        }
+        print "Installing $install in $chroot for $distro\n";
+        require OSCAR::RepositoryManager;
+        my $rm = OSCAR::RepositoryManager->new (distro=>$distro);
+        if (!defined $rm) {
+            die "ERROR: Impossible to create a RepositoryManager object";
+        }
+        print $rm->status();
+        my ($rc, @output) = $rm->install_pkg ($chroot, $install);
+        print join ("", @output);
         exit (0);
     }
     if ($list_repos) {

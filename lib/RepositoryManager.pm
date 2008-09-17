@@ -80,6 +80,18 @@ sub get_repos ($) {
     return undef;
 }
 
+################################################################################
+# Create a packman object from basic info available. We typically have two     #
+# cases:                                                                       #
+# (i) we know the distro, from there, we know everything about the repos we    #
+# need to use and the binary format used underneath (deb vs. rpm), we create   #
+# the PackMan object from there;                                               #
+# (ii) we have a list of repos, in that case, we can detect the format and     #
+# instanciate the PackMan object.                                              #
+#                                                                              #
+# Input: None.                                                                 #
+# Return: 0 if success, -1 else.                                               #
+################################################################################
 sub create_packman_object ($) {
     my $self = shift;
 
@@ -120,23 +132,56 @@ sub create_packman_object ($) {
         return -1;
     }
     $self->{pm}->repo (@repos);
+    $self->{pm}->distro ($self->{distro}) if (defined $self->{distro});
+
     return 0;
 }
 
+################################################################################
+# Search about packages.                                                       #
+#                                                                              #
+# Input: pattern, pattern to use for the search.                               #
+# Return: return from PackMan->search->repo().                                 #
+################################################################################
 sub search_opkgs ($$) {
     my ($self, $pattern) = @_;
 
     return ($self->{pm}->search_repo ($pattern));
 }
 
+################################################################################
+# Show details about OPKGs.                                                    #
+#                                                                              #
+# Input: opkg, a string representing the list of OPKGs (space between each     #
+#              name).                                                          #
+# Return: return from PackMan->show().                                         #
+################################################################################
 sub show_opkg ($$) {
     my ($self, $opkg) = @_;
 
     return $self->{pm}->show_repo ($opkg);
 }
 
+################################################################################
+# Install a list of packages based on current ORM data.                        #
+#                                                                              #
+# Input: dest, where you want to install the package (chroot for instance),    #
+#              undef if you want to install the packages on the local system.  #
+# Return: return from PackMan->smart_install().                                #
+################################################################################
+sub install_pkg ($$@) {
+    my ($self, $dest, @pkgs) = @_;
 
-# Returns a string giving the current status, undef if error
+    $self->{pm}->chroot($dest);
+    return $self->{pm}->smart_install (@pkgs);
+}
+
+################################################################################
+# Gives the status of the current RepositoryManager object,                    #
+#                                                                              #
+# Input: none.                                                                 #
+# Return: a string representing the status, undef if error.                    #
+################################################################################
 sub status ($) {
     my $self = shift;
     my $status = "Repository Manager Status:\n";
@@ -151,3 +196,19 @@ sub status ($) {
 1;
 
 __END__
+
+=head1 NAME
+
+RepositoryManager
+
+=head1 DESCRIPTION
+
+RepositoryManager is a Perl nodule that simply abstracts Packman; the goal is to
+hide all details about the underneath binary package format, list of
+repositories and so on.
+
+=head1 AUTHOR
+
+=item Geoffroy Vallee <valleegr@ornl.gov>
+
+=cut
