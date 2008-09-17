@@ -5,6 +5,8 @@ it).
 - Improve the man page for the ORM script.
 - Add the automatic generation and installation of man pages for all ORM.
 scripts.
+- Add the capability of package install using the orm script (see the orm
+manpage for more details).
 
 1.0:
 - Separate ORM from the rest of the OSCAR code.
