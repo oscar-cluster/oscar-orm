@@ -214,13 +214,22 @@ where:
 
 - search is the pattern you are looking for
 
-- $rc is the return code
+- rc is the return code
 
-- output is the result (i.e., list of OPKGs
+- output is the result (i.e., list of OPKGs)
 
 =head2 Showing details about a specific OPKG
 
-my ($rc, %output) = $rm->show_opkg ($show);
+my ($rc, %output) = $rm->show_opkg ($opkg);
+
+- opkg is the name of the binary package associated to the OPKG; for instance
+for ODA, three binary packages are available: opkg-oda-server, opkg-oda-client,
+and opkg-oda. There is no generic way of querying the details about a given
+OPKGs based on the meta-name of the OPKG (i.e., oda with our example).
+
+- rc is the return code of the query.
+
+- output is a hash with all available details about the OPKG
 
 =head1 EXAMPLES
 
