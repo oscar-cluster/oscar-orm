@@ -2,7 +2,7 @@ DESTDIR=
 
 include ./Config.mk
 
-SUBDIRS := doc bin lib
+SUBDIRS := bin lib
 
 all:
 	for dir in ${SUBDIRS} ; do ( cd $$dir ; ${MAKE} all ) ; done
@@ -15,7 +15,7 @@ uninstall:
 
 clean:
 	@rm -f build-stamp configure-stamp
-	@rm -rf debian/oda
+	@rm -rf debian/orm
 	@rm -f orm.tar.gz
 	@rm -f orm.spec
 	for dir in ${SUBDIRS} ; do ( cd $$dir ; ${MAKE} clean ) ; done
