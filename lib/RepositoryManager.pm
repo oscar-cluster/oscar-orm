@@ -197,18 +197,44 @@ sub status ($) {
 
 __END__
 
-=head1 NAME
-
-RepositoryManager
-
 =head1 DESCRIPTION
 
-RepositoryManager is a Perl nodule that simply abstracts Packman; the goal is to
-hide all details about the underneath binary package format, list of
-repositories and so on.
+=head2 Creation of a new RepositoryManager object
+
+require OSCAR::RepositoryManager;
+my $rm = OSCAR::RepositoryManager->new (distro=>$distro);
+
+If the creation fails, $rm is equal to undef.
+
+=head2 Searching for OPKGs
+
+my ($rc, @output) = $rm->search_opkgs ($search);
+
+where:
+
+- search is the pattern you are looking for
+
+- $rc is the return code
+
+- output is the result (i.e., list of OPKGs
+
+=head2 Showing details about a specific OPKG
+
+my ($rc, %output) = $rm->show_opkg ($show);
+
+=head1 EXAMPLES
+
+my ($rc, @output) = $rm->search_opkgs ("^opkg-.*-server$"); will give you the
+list of all available OPKGs (note that the command will give the list of binary
+packages for the server side of OSCAR; there is not simple way to get directly
+the list of OPKGs).
 
 =head1 AUTHOR
 
-=item Geoffroy Vallee <valleegr@ornl.gov>
+=item Geoffroy Vallee, Oak Ridge National Laboratory
+
+=head1 SEE ALSO
+
+perl(1), perldoc OSCAR::PackMan
 
 =cut
