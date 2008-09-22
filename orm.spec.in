@@ -6,7 +6,7 @@
 
 Summary:        OSCAR Repository Manager - ORM.
 Name:           orm
-Version:        1.0
+Version:        1.1
 Release:        1
 Vendor:         Open Cluster Group <http://OSCAR.OpenClusterGroup.org/>
 Distribution:   OSCAR
@@ -35,5 +35,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %{sharepref}/*
 
 %changelog
+* Mon Sep 22 2008 Geoffroy Vallee <valleegr@ornl.gov> 1.1-1
+- new upstream version (see ChangeLog for more details).
 * Thu Sep 04 2008 Geoffroy Vallee <valleegr@ornl.gov> 1.0-1
 - new upstream version (see ChangeLog for more details).

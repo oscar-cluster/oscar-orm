@@ -1,4 +1,4 @@
-1.1 (not yet released):
+1.1:
 - Add a spec file for the creation of a RPM for ORM (use "make rpm" to create
 it).
 - Add the missing top-level Makefile.
