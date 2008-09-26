@@ -15,7 +15,7 @@ package OSCAR::RepositoryManager;
 use strict;
 use warnings;
 use OSCAR::OCA::OS_Detect;
-use Data::Dumper;
+use File::Basename;
 use Carp;
 
 sub new {
@@ -168,11 +168,21 @@ sub show_opkg ($$) {
 # Input: dest, where you want to install the package (chroot for instance),    #
 #              undef if you want to install the packages on the local system.  #
 # Return: return from PackMan->smart_install().                                #
+# TODO: switching to a ref to an array for the list of OPKGs will limit the    #
+#       possibility of bugs, because of parameters shifting.                   #
 ################################################################################
 sub install_pkg ($$@) {
     my ($self, $dest, @pkgs) = @_;
 
+    if (!defined $dest || ! -d File::Basename::dirname ($dest)) {
+        carp "ERROR: Invalid destination ($dest), impossible to install ".
+             "packages";
+        return undef;
+    }
+    print "Installing packages in $dest:\n";
+    OSCAR::Utils::print_array (@pkgs);
     $self->{pm}->chroot($dest);
+    print $self->status();
     return $self->{pm}->smart_install (@pkgs);
 }
 
