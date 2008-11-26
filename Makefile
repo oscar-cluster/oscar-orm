@@ -33,6 +33,7 @@ dist: clean
 rpm: dist
 	sed -e "s/PERLLIBPATH/$(SEDLIBDIR)/" < orm.spec.in \
         > orm.spec
+	cp orm.tar.gz /usr/src/redhat/SOURCES
 	rpmbuild -bb ./orm.spec
 
 deb:

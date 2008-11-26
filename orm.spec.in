@@ -1,12 +1,13 @@
 %define binpref /usr/bin
+%define manpref /usr/local/man/man1
 %define libpref PERLLIBPATH
-%define sharepref /usr/share/oscar/prereqs/orm/
 %define bintarget $RPM_BUILD_ROOT%{binpref}
 %define libtarget $RPM_BUILD_ROOT%{libpref}
+%define mantarget $RPM_BUILD_ROOT%{manpref}
 
 Summary:        OSCAR Repository Manager - ORM.
 Name:           orm
-Version:        1.1
+Version:        1.2
 Release:        1
 Vendor:         Open Cluster Group <http://OSCAR.OpenClusterGroup.org/>
 Distribution:   OSCAR
@@ -32,9 +33,11 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %defattr(-,root,root)
 %{binpref}/*
 %{libpref}/*
-%{sharepref}/*
+%{manpref}/*
 
 %changelog
+* Wed Nov 26 2008 Geoffroy Vallee <valleegr@ornl.gov> 1.2-1
+- new upstream version (see ChangeLog for more details).
 * Mon Sep 22 2008 Geoffroy Vallee <valleegr@ornl.gov> 1.1-1
 - new upstream version (see ChangeLog for more details).
 * Thu Sep 04 2008 Geoffroy Vallee <valleegr@ornl.gov> 1.0-1
