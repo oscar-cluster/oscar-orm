@@ -8,7 +8,7 @@
 Summary:        OSCAR Repository Manager - ORM.
 Name:           orm
 Version:        1.2
-Release:        2
+Release:        3
 Vendor:         Open Cluster Group <http://OSCAR.OpenClusterGroup.org/>
 Distribution:   OSCAR
 Packager:       Geoffroy Vallee <valleegr@ornl.gov>
@@ -37,6 +37,8 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %{manpref}/*
 
 %changelog
+* Thu Dec 04 2008 Geoffroy Vallee <valleegr@ornl.gov> 1.2-3
+- Move the libraries into a noarch directory.
 * Fri Nov 28 2008 Geoffroy Vallee <valleegr@ornl.gov> 1.2-2
 - Disable automatic dependencies.
 * Wed Nov 26 2008 Geoffroy Vallee <valleegr@ornl.gov> 1.2-1
