@@ -1,6 +1,7 @@
 1.2 (not yet released):
 - Improve error handling.
 - Improve the spec file.
+- Improve the Makefile.
 
 1.1:
 - Add a spec file for the creation of a RPM for ORM (use "make rpm" to create
