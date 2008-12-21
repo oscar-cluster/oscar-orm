@@ -15,7 +15,7 @@ uninstall:
 
 clean:
 	@rm -f build-stamp configure-stamp
-	@rm -rf debian/orm
+	@rm -rf debian/orm debian/files
 	@rm -f orm.tar.gz
 	@rm -f orm.spec
 	for dir in ${SUBDIRS} ; do ( cd $$dir ; ${MAKE} clean ) ; done
