@@ -1,4 +1,4 @@
-1.2 (not yet released):
+1.2:
 - Improve error handling.
 - Improve the spec file.
 - Improve the Makefile.
