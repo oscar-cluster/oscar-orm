@@ -1,4 +1,5 @@
 DESTDIR=
+SOURCEDIR=/usr/src/redhat/SOURCES
 
 include ./Config.mk
 
@@ -33,7 +34,7 @@ dist: clean
 rpm: dist
 	sed -e "s/PERLLIBPATH/$(SEDLIBDIR)/" < orm.spec.in \
         > orm.spec
-	cp orm.tar.gz /usr/src/redhat/SOURCES
+	cp orm.tar.gz $(SOURCEDIR)
 	rpmbuild -bb ./orm.spec
 
 deb:
