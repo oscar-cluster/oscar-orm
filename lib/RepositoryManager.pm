@@ -41,7 +41,7 @@ sub new {
         my ($dist, $ver, $arch) 
             = OSCAR::PackagePath::decompose_distro_id ($self->{distro});
         my $os = OSCAR::OCA::OS_Detect::open (fake=>
-            {distro=>$dist, version=>$ver, arch=>$arch});
+            {distro=>$dist, distro_version=>$ver, arch=>$arch});
         my $drepo = OSCAR::PackagePath::distro_repo_url(os=>$os);
         my $orepo = OSCAR::PackagePath::oscar_repo_url(os=>$os);
         $self->{repos} = "$drepo,$orepo";

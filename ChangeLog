@@ -1,4 +1,6 @@
+
 1.2.1 (not yet released):
+- Fix a problem when using OS_Detect.
 - Modify the Makefile so we can choose the directory to save sources when
 creating RPMs.
 - Modify the Makefile so we can choose the directory where the binary packages

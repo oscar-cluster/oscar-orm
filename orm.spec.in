@@ -7,8 +7,8 @@
 
 Summary:        OSCAR Repository Manager - ORM.
 Name:           orm
-Version:        1.2
-Release:        3
+Version:        1.2.1
+Release:        1
 Vendor:         Open Cluster Group <http://OSCAR.OpenClusterGroup.org/>
 Distribution:   OSCAR
 Packager:       Geoffroy Vallee <valleegr@ornl.gov>
