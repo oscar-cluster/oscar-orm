@@ -37,6 +37,8 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %{manpref}/*
 
 %changelog
+* Mon Feb 09 2009 Geoffroy Vallee <valleegr@ornl.gov> 1.2.1-1
+- New upstream version (see ChangeLog for more details).
 * Thu Dec 04 2008 Geoffroy Vallee <valleegr@ornl.gov> 1.2-3
 - Move the libraries into a noarch directory.
 * Fri Nov 28 2008 Geoffroy Vallee <valleegr@ornl.gov> 1.2-2

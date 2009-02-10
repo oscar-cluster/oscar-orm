@@ -1,8 +1,8 @@
-orm (1.2.1-1) intrepid; urgency=low
+orm (1.2.1-1) hardy; urgency=low
 
   * New upstream version.
 
- -- Geoffroy Vallee <valleegr@ornl.gov>  Sun, 08 Feb 2009 15:07:28 -0500
+ -- Geoffroy Vallee <valleegr@ornl.gov>  Mon, 09 Feb 2009 22:05:28 -0500
 
 orm (1.1-1) gutsy; urgency=low
 
