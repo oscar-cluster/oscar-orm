@@ -1,3 +1,6 @@
+1.2.2 (not yet released):
+- Improve the Perldoc documentation.
+
 1.2.1:
 - Fix a problem when using OS_Detect.
 - Modify the Makefile so we can choose the directory to save sources when

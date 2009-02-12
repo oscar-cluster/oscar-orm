@@ -250,7 +250,7 @@ the list of OPKGs).
 
 =head1 AUTHOR
 
-=item Geoffroy Vallee, Oak Ridge National Laboratory
+Geoffroy Vallee, Oak Ridge National Laboratory
 
 =head1 SEE ALSO
 

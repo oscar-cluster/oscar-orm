@@ -304,7 +304,7 @@ if ($interactive) {
         my @list = ();
         foreach my $repo (@repos) {
             add_repo_to_cache ($repo);
-            my @opkgs = get_available_opkgs($repo);
+            my @opkgs = OSCAR::ORM::get_available_opkgs($repo);
             foreach my $opkg (@opkgs) {
                 push (@list, $opkg);
             }
