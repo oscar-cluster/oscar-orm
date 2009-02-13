@@ -1,5 +1,7 @@
 1.2.2 (not yet released):
 - Improve the Perldoc documentation.
+- Fix a problem when querying the OPKGs available by default for the local 
+distribution.
 
 1.2.1:
 - Fix a problem when using OS_Detect.

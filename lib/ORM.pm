@@ -21,11 +21,9 @@ package OSCAR::ORM;
 use strict;
 use XML::Simple;
 use Data::Dumper;
-use OSCAR::Utils qw (print_array);
-use OSCAR::PackagePath qw (
-                            get_repo_type
-                            list_distro_pools
-                          );
+use OSCAR::Utils;
+use OSCAR::PackagePath; 
+use OSCAR::OCA::OS_Detect;
 use Carp;
 
 use vars qw($VERSION @EXPORT);
@@ -53,7 +51,12 @@ our @opkg_list;
 my $opd2_lockfile = "/tmp/opd2.pid";
 
 # List of OSCAR repositories used by default, using the yume or rapt syntax
-my @default_oscar_repos = ("http://oscar.gforge.inria.fr/debian/+stable+oscar");
+my $os = OSCAR::OCA::OS_Detect::open();
+my $distro = "$os->{compat_distro}-$os->{compat_distrover}-$os->{arch}";
+my @default_oscar_repos;
+# We currently have a single default repo but that may change in the future.
+my $r = OSCAR::PackagePath::get_default_oscar_repo ($distro);
+push (@default_oscar_repos, $r);
 
 my $verbose = $ENV{OPD_VERBOSE};
 our $xml_data;

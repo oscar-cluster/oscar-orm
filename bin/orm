@@ -237,7 +237,7 @@ init_opd();
 
 if ($interactive) {
     if ($list_default_repos) {
-        my @list = get_default_repositories ();
+        my @list = OSCAR::ORM::get_default_repositories ();
         # Then we print the result. Remember that the output is used by
         # other application, only print the strict necessary
         foreach my $item (@list){
