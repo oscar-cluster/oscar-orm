@@ -328,24 +328,7 @@ sub help_and_die () {
 sub help ($) {
     print "Usage: $0 OPTIONS\n";
     print "\n";
-    print "Call the OPD2 command line, both a interactive and a non-interactive".
-          " are available.\n";
-    print "OPTIONS can be:\n";
-    print " --non-interactive : use OPD2 in non-interactive mode;\n";
-    print "                     this option enables options --repo and\n";
-    print "                     --default-repos.\n";
-    print "                     In non-interactive mode, each command gives\n";
-    print "                     the list of available OSCAR packages.\n";
-    print " --repo URL        : repository which should be used for queries \n";
-    print "                     (multiple --repo options are possible).\n";
-    print " --help            : this help information.\n";
-    print " --default-opkgs   : gives the list of OPKGs available via the\n";
-    print "                     default OSCAR repositories. If this option\n";
-    print "                     deactivates the --repo option.\n";
-    print " --list-default-repos : gives the list of default OSCAR repos.\n";
-    print " --list-repos      : gives the list of available repositories.\n";
-    print "                     This option deactivates other options.\n";
-    print "\n";
+    print "For usage information, please refer to the man page (man orm).\n";
     exit;
 }
 
@@ -381,7 +364,7 @@ Supported options include:
 
 =item --non-interactive
 
-Use OPD2 in non-interactive mode this option enables options --repo and
+Use ORM in non-interactive mode this option enables options --repo and
 --default-repos. In non-interactive mode, each command gives the list of
 available OSCAR packages.
 
