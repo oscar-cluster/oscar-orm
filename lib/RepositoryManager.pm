@@ -186,6 +186,21 @@ sub install_pkg ($$@) {
     return $self->{pm}->smart_install (@pkgs);
 }
 
+sub remove_pkg ($$@) {
+    my ($self, $dest, @pkgs) = @_;
+
+    if (!defined $dest || ! -d File::Basename::dirname ($dest)) {
+        carp "ERROR: Invalid destination ($dest), impossible to install ".
+             "packages";
+        return undef;
+    }
+    print "Installing packages in $dest:\n";
+    OSCAR::Utils::print_array (@pkgs);
+    $self->{pm}->chroot($dest);
+    print $self->status();
+    return $self->{pm}->smart_remove (@pkgs);
+}    
+
 ################################################################################
 # Gives the status of the current RepositoryManager object,                    #
 #                                                                              #
@@ -240,6 +255,14 @@ OPKGs based on the meta-name of the OPKG (i.e., oda with our example).
 - rc is the return code of the query.
 
 - output is a hash with all available details about the OPKG
+
+=head2 Install Packages
+
+my $rc = install_pkg ("/", "yume");
+
+=head2 Remove Packages
+
+my $rc = remove_pkg ("/", "yume");
 
 =head1 EXAMPLES
 

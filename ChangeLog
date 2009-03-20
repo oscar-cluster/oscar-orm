@@ -3,6 +3,7 @@
 - Fix a problem when querying the OPKGs available by default for the local 
 distribution.
 - Improve the orm man page and revisit the --help option.
+- RepositoryManager.pm now allows one to remove binary packages.
 
 1.2.1:
 - Fix a problem when using OS_Detect.
