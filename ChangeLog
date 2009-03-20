@@ -1,4 +1,4 @@
-1.2.2 (not yet released):
+1.2.2:
 - Improve the Perldoc documentation.
 - Fix a problem when querying the OPKGs available by default for the local 
 distribution.
