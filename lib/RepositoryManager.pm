@@ -194,7 +194,7 @@ sub remove_pkg ($$@) {
              "packages";
         return undef;
     }
-    print "Installing packages in $dest:\n";
+    print "Removing packages from $dest:\n";
     OSCAR::Utils::print_array (@pkgs);
     $self->{pm}->chroot($dest);
     print $self->status();
