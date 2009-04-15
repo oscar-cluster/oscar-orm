@@ -442,16 +442,38 @@ sub list_available_opkgs ($) {
 
 ###############################################################################
 # Get the list of available repositories.                                     #
-# Parameter: none.                                                            #
-# Return:    array of repositories URL.                                       #
+# Parameter: distro_id, id of the local distribution for which we want to get #
+#                       the list of repos. If distro_id is undefined, we get  #
+#                       the distro id of the local distribution.              #
+# Return:    array of repositories URL, undef if error.                       #
 ###############################################################################
-sub get_available_repositories {
+sub get_available_repositories () {
+    my $distro_id = shift;
+
+    if (!defined $distro_id) {
+        require OSCAR::PackagePath;
+        $distro_id = OSCAR::PackagePath::get_distro ();
+    }
+
+    # Now $distro_id should be defined
+    if (!defined $distro_id) {
+        carp "ERROR: No distribution specified";
+        return undef;
+    }
+
     my @list = ();
 
     # We check in /tftpboot/distro which are the supported distros.
     # Note that means that the user should populate manually this directory.
     my %distros = list_distro_pools ();
-    print Dumper %distros;
+    return undef if (keys (%distros) == 0);
+
+    my $data = $distros{$distro_id};
+    # if we do not get results to our query, we just exit.
+    return undef if (!defined $data);
+
+    push (@list, $data->{'oscar_repo'});
+    push (@list, $data->{'distro_repo'});
 
     return @list;
 }
@@ -476,16 +498,23 @@ sub list_available_repositories {
 ###############################################################################
 sub get_included_opkgs {
     my $distro = shift;
+
+    if (!defined $distro) {
+        require OSCAR::::PackagePath;
+        $distro = OSCAR::PackagePath::get_distro ();
+    }
+
+    # Now the distro id should be defined
+    if (!defined $distro) {
+        carp "ERROR: No distribution specified";
+        return undef;
+    }
+
     my @list = ();
 
-    if ($distro eq "debian") {
-        @list = parse_debian_package_file ();
-    } else {
-        carp ("Sorry, we cannot yet get the list of available OPKGs from the ".
-              "official OSCAR repository for the Linux distribution $distro.".
-              "\nThis is most certainly because this distribution is not yet ".
-              "supported.\n");
-    }
+    require OSCAR::RepositoryManager;
+    my $rm = OSCAR::RepositoryManager->new(distro=>$distro);
+    my ($rc, @list) = $rm->search_opkgs ("^opkg-.*-server\$");
 
     return @list;
 }
@@ -501,6 +530,11 @@ sub get_included_opkgs {
 sub list_included_opkgs {
     my $distro = shift;
     my @list = get_included_opkgs ($distro);
+    for (my $i=0; $i<scalar(@list); $i++) {
+        if ($list[$i] =~ /^opkg-(.*)-server$/) {
+            $list[$i] = $1;
+        }
+    }
     print_array (@list);
 }
 

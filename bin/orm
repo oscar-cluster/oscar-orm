@@ -25,43 +25,36 @@ use strict;
 use Carp;
 use Term::ReadLine;
 use Getopt::Long;
-use OSCAR::ORM qw(
-                    add_repo_to_cache
-                    flush_cache
-                    get_available_opkgs
-                    get_available_repositories
-                    get_included_opkgs
-                    get_default_repositories
-                    init_cache
-                    init_opd
-                    list_available_opkgs
-                    list_available_repositories
-                    list_included_opkgs
-                  );
-use OSCAR::Utils qw (print_array);
-use Data::Dumper;
+use OSCAR::ORM;
+use OSCAR::Utils;
 
 my $repository_listing;
 my $repository_selected = -1;
 our $selected_repo = "";
 my $package_listing;
 my $verbose = $ENV{ORM_VERBOSE};
+my @repos;
 
-my ($interactive, @repos, $default_repo, $list_default_repos, $list_repos,
-    $distro, $search, $show, $install, $chroot);
+my ($interactive, $distro, $default_repo, $list_default_repos, $list_repos,
+    $distro, $search, $show, $install, $chroot, $mirror_oscar_repo, 
+    $mirror_distro_repo);
+
+use vars qw ($distro_id);
 
 Getopt::Long::Configure("pass_through");
 GetOptions(
         "non-interactive"       => \$interactive, 
-        "default-opkgs"         => \$default_repo,
+        "opkgs"                 => \$default_repo,
         "chroot=s"              => \$chroot,
         "distro=s"              => \$distro,
         "install=s"             => \$install,
-        "list-default-repos"    => \$list_default_repos,
-        "repo=s"                => \@repos,
+#        "list-repos"    => \$list_default_repos,
+        "distro=s"              => \$distro,
         "search=s"              => \$search,
         "show=s"                => \$show,
         "list-repos"            => \$list_repos,
+        "mirror-oscar-repo=s"   => \$mirror_oscar_repo,
+        "mirror-distro-repo=s"  => \$mirror_distro_repo,
         "help"                  => \&help,
         ) || help_and_die();
 
@@ -123,27 +116,25 @@ sub main_menu {
     }
     next if (!$cmd);
 
+#    if (/^f/i || /^flush/i) {
+#        OSCAR::ORM::flush_cache ();
+#    }
+
     # Change repository
 
-    if (/^a/i || /^add/i) {
-        my $url = $opd_term->readline("Enter repository URL>");
-        if (!$url) {
-            print ("ERROR: no repository has been specified\n");
-        next;
-        }
+#    if (/^a/i || /^add/i) {
+#        my $url = $opd_term->readline("Enter repository URL>");
+#        if (!$url) {
+#            print ("ERROR: no repository has been specified\n");
+#        next;
+#        }
 #        scan_repository ($url);
-    }
 
-    elsif (/^f/i || /^flush/i) {
-        flush_cache ();
-    }
 
     # List available OSCAR repositories
 
-    elsif (/^r/i || /^repo/i || /^repos/i || /^repository/i) {
-        print("\n");
-        print "Available repository:\n";
-        list_available_repositories ();
+    if (/^d/i || /^distro/i) {
+        $distro_id = $opd_term->readline("Enter the distro ID> ");
         print("\n");
     }
 
@@ -151,34 +142,13 @@ sub main_menu {
 
     elsif (/^l/i || /^li/i || /^list/i || /^ls/i ) {
         print("\n");
-        list_available_opkgs($selected_repo);
+        print "Querying for available OPKGS; this may take a while, be ".
+              "patient...\n";
+        OSCAR::ORM::list_included_opkgs($distro_id);
         print("\n");
 #         print "OPKGs available from the official OSCAR repository:\n";
-#         list_included_opkgs ("debian");
+#         OSCAR::ORM::list_included_opkgs ("debian");
 #         print("\n");
-    }
-
-    # Select a repository
-
-    elsif (/^s/i || /^select/i ) {
-        print ("\n");
-        print "Select one the following OSCAR repositories:\n";
-        my @repos = get_available_repositories ();
-        print "\t0: all\n";
-        my $i = 1;
-        foreach my $repo (@repos) {
-            print "\t$i: $repo\n";
-        }
-        my $valid_selection = 0;
-        while ($valid_selection == 0) {
-            my $selection = $opd_term->readline("Your selection> ");
-            if (defined @repos[$selection-1]) {
-                $valid_selection = 1;
-                $selected_repo = @repos[$selection-1];
-            } else {
-                print "ERROR: Invalid selection.\n";
-            }
-        }
     }
 
     # Print the help message
@@ -186,12 +156,11 @@ sub main_menu {
     elsif (/^\?/ || /^h/i || /^help/i) {
         print("
 [h] help       - This message
-[a] add        - Add an OSCAR repository
-[s] select     - Select a repository
-[i] info       - Display information about the selected repository
-[r] repository - Display the list of available OSCAR repositories
-[l] list       - Display the list of available OSCAR packages
-[f] flush      - Flush the OPD cache
+[i] info       - Display information about the selected distribution
+[d] distro     - Specify the distribution that should be used for queries (to
+                 get the list of available distros, please execute the 
+                 \"oscar-config --list-setup-distros\" command
+[l] list       - Display the list of available opkgs
 [q] quit       - Quit
 R              - Select the specified package(s)
 
@@ -206,7 +175,13 @@ R can be a single integer value, a range or an enumeration of all that :
 
     elsif (/^i/i || /^in/i || /^info/i) {
         print "\n";
-        list_available_repositories ();
+        if (defined $distro_id) {
+            print "Distro ID: $distro_id\n";
+        } else {
+            print "Using the local distro\n"
+        }
+        print "Repositories: ";
+        OSCAR::ORM::list_available_repositories ($distro_id);
         print "\n";
     }
 
@@ -233,7 +208,7 @@ if ($interactive) {
     $verbose = 0;
 }
 
-init_opd();
+OSCAR::ORM::init_opd();
 
 if ($interactive) {
     if ($list_default_repos) {
@@ -266,7 +241,7 @@ if ($interactive) {
         }
         my ($rc, %output) = $rm->show_opkg ($show);
         print "----> [ORM] Packages details:\n";
-        print Dumper (%output);
+        OSCAR::Utils::print_hash  ("", "", \%output);
         print "----> [ORM] end.\n";
         exit (0);
     }
@@ -286,7 +261,7 @@ if ($interactive) {
         exit (0);
     }
     if ($list_repos) {
-        my @list = get_available_repositories ();
+        my @list = OSCAR::ORM::get_available_repositories ();
         # Then we print the result. Remember that the output is used by
         # other application, only print the strict necessary
         foreach my $item (@list){
@@ -296,14 +271,14 @@ if ($interactive) {
         exit (0);
     }
     if ($default_repo) {
-        @repos = get_default_repositories ();
+        @repos = OSCAR::ORM::get_default_repositories ();
     }
     if (!defined @repos && !defined $distro) {
         die "ERROR: you must specify a repository or a distro id\n";
     } else {
         my @list = ();
         foreach my $repo (@repos) {
-            add_repo_to_cache ($repo);
+            OSCAR::ORM::add_repo_to_cache ($repo);
             my @opkgs = OSCAR::ORM::get_available_opkgs($repo);
             foreach my $opkg (@opkgs) {
                 push (@list, $opkg);
@@ -343,8 +318,7 @@ the management OSCAR packages via repositories when managing clusters.
 
 =head1 SYNOPSIS
 
-orm [--non-interactive] [--default-opkgs] [--list-default-repos] [--repo <URL>] 
-     [--list-repos] [--help]
+orm <OPTIONS> 
 
 =head1 DESCRIPTION
 
@@ -368,23 +342,22 @@ Use ORM in non-interactive mode this option enables options --repo and
 --default-repos. In non-interactive mode, each command gives the list of
 available OSCAR packages.
 
-=item --default-opkgs
+=item --opkgs
 
-Gives the list of OPKGs available via the default OSCAR repositories. If this
-option deactivates the --repo option.
-
-=item --list-default-repos
-
-Gives the list of default OSCAR repos.
-
-=item --repo <URL>
-
-Repository which should be used for queries (multiple --repo options are 
-possible).
+Gives the list of OPKGs available via the default OSCAR repositories. 
 
 =item --list-repos
 
-Gives the list of available repositories. This option deactivates other options.
+Gives the list of default OSCAR repos for the specified distribution (if the --distro option is not used, we display the repos for the local distribution).
+
+=item --mirror-oscar-repo <DISTRO_ID>
+
+=item --mirror-distro-repo <DISTRO_ID>
+
+=item --distro <DISTRO_ID>
+
+Linux distribution which should be used for queries (multiple --repo options 
+are possible).
 
 =item --help
 

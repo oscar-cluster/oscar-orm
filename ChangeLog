@@ -1,3 +1,18 @@
+1.3 (not yet released):
+- Revisit the non-interactive mode to center the capabilities around the
+notion of "distribution" (which is actually the level of abstraction ORM is
+supposed to provide).
+- [Ticket #252] Local caches are not anymore used, we directly query
+repositories (modification due to the fact that we now deal with both online
+and local repositories).
+- [Ticket #512] ORM is now fully based on the abstraction of Linux
+distribution and we can now select different Linux distributions and query
+them.
+- [Ticket #382] It is now possible to query repositories in interactive mode
+(based on the current distribution).
+- [Ticket #513] Add an option to the interactive mode ("info") to display
+repositories associated to the current Linux distribution.
+
 1.2.2:
 - Improve the Perldoc documentation.
 - Fix a problem when querying the OPKGs available by default for the local 
