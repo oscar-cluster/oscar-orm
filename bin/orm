@@ -63,6 +63,8 @@ my $opd_term = new Term::ReadLine 'OPD';
 #
 # Loop over the main menu
 #
+# Return: 0 if success, -1 else.
+#
 sub main_menu {
     my $selection;
 
@@ -151,6 +153,26 @@ sub main_menu {
 #         print("\n");
     }
 
+    # Mirror the OSCAR repository
+
+    elsif (/^o/i || /^omirrir/i) {
+        print "\n";
+        if (OSCAR::ORM::mirror_oscar_repo ($distro_id)) {
+            carp "ERROR: Impossible to mirror the OSCAR repository";
+            return -1;
+        }
+    }
+
+    # Mirror the distro repository
+
+    elsif (/^m/i || /^dmirror/i) {
+        print "\n";
+        if (OSCAR::ORM::mirror_distro_repo ($distro_id)) {
+            carp "ERROR: Impossible to mirror the distro repository";
+            return -1;
+        }
+    }
+
     # Print the help message
 
     elsif (/^\?/ || /^h/i || /^help/i) {
@@ -161,6 +183,8 @@ sub main_menu {
                  get the list of available distros, please execute the 
                  \"oscar-config --list-setup-distros\" command
 [l] list       - Display the list of available opkgs
+[o] omirror    - Mirror the OSCAR repository for the current distribution
+[m] dmirror    - Mirror the distribution's repository for the current distribution
 [q] quit       - Quit
 R              - Select the specified package(s)
 
@@ -268,6 +292,18 @@ if ($interactive) {
             print "$item ";
         }
         print "\n";
+        exit (0);
+    }
+    if ($mirror_oscar_repo) {
+        if (OSCAR::ORM::mirror_distro_repo ($distro)) {
+            die "ERROR: Impossible to mirror the oscar repo";
+        }
+        exit (0);
+    }
+    if ($mirror_distro_repo) {
+        if (OSCAR::ORM::mirror_oscar_repo ($distro)) {
+            die "ERROR: Impossible to mirror the distro repo";
+        }
         exit (0);
     }
     if ($default_repo) {

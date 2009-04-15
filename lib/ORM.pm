@@ -41,6 +41,8 @@ use base qw(Exporter);
             list_available_opkgs
             list_available_repositories
             list_included_opkgs
+            mirror_distro_repo
+            mirror_oscar_repo
              );
 
 my $cachedir = "/var/cache/oscar/";
@@ -552,6 +554,65 @@ sub flush_cache {
 
 sub get_default_repositories {
     return @default_oscar_repos;
+}
+
+sub mirror_oscar_repo ($) {
+    my $distro_id = shift;
+
+    # We make sure we get a valid distro_id
+    if (!defined ($distro_id)) {
+        require OSCAR::PackagePath;
+        $distro_id = OSCAR::PackagePath::get_distro();
+    }
+    if (!defined ($distro_id)) {
+        carp "ERROR: Impossible to get a valid distro Id";
+        return -1;
+    }
+
+    # We get the compat distro
+    my $compat_distro = OSCAR::PackagePath::get_compat_distro($distro_id);
+    if (!defined ($compat_distro)) {
+        carp "ERROR: Impossible to detect the compat distro ($distro_id)";
+        return -1;
+    }
+
+    # We get the mirror URL
+    my $url = OSCAR::PackagePath::get_default_oscar_repo ($distro_id); 
+
+    # We now mirror the repository
+    if (OSCAR::PackagePath::mirror_repo ($url,
+                                         $compat_distro,
+                                         "/tftpboot/distro")) {
+        carp "ERROR: Impossible to mirror $url";
+        return -1;
+    }
+
+    return 0;
+}
+
+sub mirror_distro_repo ($) {
+    my $distro_id = shift;
+
+    # We make sure we get a valid distro_id
+    if (!defined ($distro_id)) {
+        require OSCAR::PackagePath;
+        $distro_id = OSCAR::PackagePath::get_distro();
+    }
+    if (!defined $distro_id) {
+        carp "ERROR: Impossible to get a valid distro Id";
+        return -1;
+    }
+
+    # We get the mirror URL
+    my $url =  OSCAR::PackagePath::get_default_distro_repo ($distro_id);
+
+    # We now mirror the repository
+    if (OSCAR::PackagePath::mirror_repo ($url, $distro_id, "/tftpboot/distro")) {
+        carp "ERROR: Impossible to mirror $url";
+        return -1;
+    }
+
+    return 0;
 }
 
 1;
