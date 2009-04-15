@@ -7,6 +7,6 @@ Standards-Version: 3.7.2
 
 Package: orm
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, liboscar, packman
+Depends: ${shlibs:Depends}, ${misc:Depends}, liboscar (> 6.0.2), packman
 Description: OSCAR Repository Manager
  Set of scripts and Perl modules for the management of the OSCAR repositories.
