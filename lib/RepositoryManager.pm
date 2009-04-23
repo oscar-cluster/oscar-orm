@@ -258,11 +258,11 @@ OPKGs based on the meta-name of the OPKG (i.e., oda with our example).
 
 =head2 Install Packages
 
-my $rc = install_pkg ("/", "yume");
+my ($rc, @output) = install_pkg ("/", "yume");
 
 =head2 Remove Packages
 
-my $rc = remove_pkg ("/", "yume");
+my ($rc, @output) = remove_pkg ("/", "yume");
 
 =head1 EXAMPLES
 
