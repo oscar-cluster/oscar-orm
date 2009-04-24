@@ -1,4 +1,4 @@
-1.3 (not yet released):
+1.3:
 - Revisit the non-interactive mode to center the capabilities around the
 notion of "distribution" (which is actually the level of abstraction ORM is
 supposed to provide).
