@@ -5,7 +5,7 @@ PKG=orm
 
 include ./Config.mk
 
-SUBDIRS := bin lib
+SUBDIRS := bin lib etc
 
 all:
 	for dir in ${SUBDIRS} ; do ( cd $$dir ; ${MAKE} all ) ; done

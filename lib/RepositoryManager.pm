@@ -25,6 +25,7 @@ sub new {
         repos => undef,
         distro => undef,
         format => undef,
+        repo_cache => undef,
         pm => undef,
         @_,
     };
@@ -46,8 +47,14 @@ sub new {
         my $orepo = OSCAR::PackagePath::oscar_repo_url(os=>$os);
         $self->{repos} = "$drepo,$orepo";
     }
+    # Note that the cache for repositories' format should be initialized before
+    # PackMan
+    if (!defined ($self->{repo_cache})) {
+        require OSCAR::RepoCache;
+        $self->{repo_cache} = OSCAR::RepoCache->new();
+    }
     if (!defined ($self->{pm})) {
-        if ($self->create_packman_object ()) {
+        if ($self->create_packman_object ($self->{repo_cache})) {
             print "ERROR: Impossible to associate a PackMan object";
         }
     }
@@ -92,8 +99,8 @@ sub get_repos ($) {
 # Input: None.                                                                 #
 # Return: 0 if success, -1 else.                                               #
 ################################################################################
-sub create_packman_object ($) {
-    my $self = shift;
+sub create_packman_object ($$) {
+    my ($self, $rc) = @_;
 
     if (!defined $self->{repos}) {
         carp "ERROR: This is bad, no repos are defined, this should never ".
@@ -106,8 +113,11 @@ sub create_packman_object ($) {
         carp "ERROR: Impossible to get the repositories";
         return -1;
     }
-    require OSCAR::PackageSmart;
-    my $format = OSCAR::PackageSmart::detect_pools_format (@repos);
+    if (!defined $rc) {
+        carp "ERROR: Impossible to initialize the cache for repositories";
+        return -1;
+    }
+    my $format = $rc->get_repos_format (@repos);
     if (!defined ($format)) {
         carp "ERROR: Impossible to detect the binary format";
         return -1;
