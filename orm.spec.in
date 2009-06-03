@@ -37,6 +37,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %{binpref}/*
 %{libpref}/*
 %{manpref}/*
+/var/lib/oscar/*
 
 %changelog
 * Thu Apr 30 2009 Geoffroy Vallee <valleegr@ornl.gov> 1.3-2
