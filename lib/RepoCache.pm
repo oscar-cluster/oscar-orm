@@ -81,14 +81,14 @@ sub load_cache ($) {
 sub print_cache ($) {
     my $self = shift;
 
-    print "Repositories' format cache:\n";
+    print "Repositories' format cache:\n" if $self->{verbose};
     if (defined $self->{cache}) {
         my $hash_ref = $self->{cache};
         foreach my $k (keys (%$hash_ref)) {
             print $k . " " . $self->{cache}{$k} . "\n";
         }
     } else {
-        print "Cache empty\n";
+        print "Cache empty\n" if $self->{verbose};
     }
 
     return 0;
@@ -99,9 +99,10 @@ sub get_format ($$) {
     my $format;
 
     if (defined $self->{cache} > 0) {
-        $format = $self->{cache}{$url};
-        if (!defined $format) {
+        print "[INFO] Cache existing\n";
+        if (!defined $self->{cache}{$url}) {
             require OSCAR::PackageSmart;
+            print "[INFO] $url is not in cache\n" if $self->{verbose};
             $format = OSCAR::PackageSmart::detect_pools_format ($url);
             if (!defined ($format)) {
                 carp "ERROR: Impossible to detect the format of the $url repo";
@@ -109,17 +110,24 @@ sub get_format ($$) {
             }
             $cache{$url} = $format;
             OSCAR::FileUtils::add_line_to_file_without_duplication (
-                "$url $format", $self->{cache_file});
+                "$url $format\n", $self->{cache_file});
+        } else {
+            print "[INFO] $url is in cache\n" if $self->{verbose};
         }
     } else {
+        require OSCAR::PackageSmart;
+        print "[INFO] Cache empty, populating...\n" if $self->{verbose};
         $format = OSCAR::PackageSmart::detect_pools_format ($url);
         if (!defined ($format)) {
             carp "ERROR: Impossible to detect the format of the $url repo";
             return undef;
         }
         $cache{$url} = $format;
-        OSCAR::FileUtils::add_line_to_file_without_duplication (
-            "$url $format", $self->{cache_file});
+        if (OSCAR::FileUtils::add_line_to_file_without_duplication (
+            "$url $format\n", $self->{cache_file})) {
+            carp "ERROR: Impossible to add the entry in the cache";
+            return undef;
+        }
     }
 
     return $format;
