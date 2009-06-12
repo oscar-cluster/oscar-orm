@@ -17,6 +17,11 @@ $repo_cache->print_cache();
 my $url = "http://bear.csm.ornl.gov/repos/unstable/debian-4-i386/+etch+/";
 my $f = $repo_cache->get_format($url);
 print "Format of the cache $url: $f\n";
+
+$url = "http://mirror.ovh.net/ftp.centos.org/5.3/os/i386/";
+$f = $repo_cache->get_format($url);
+print "Format of the cache $url: $f\n";
+
 $repo_cache->print_cache();
 
 exit 0;

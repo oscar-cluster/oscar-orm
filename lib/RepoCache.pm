@@ -140,6 +140,10 @@ sub get_repos_format ($@) {
 
     foreach my $r (@repos) {
         $f = $self->get_format ($r);
+        if (!defined $f) {
+            carp "ERROR: Impossible to detect the format of $r";
+            return undef;
+        }
         $format = $f if (!defined $format);
         if ($format ne $f) {
             carp "ERROR: Conflict in formats ($f, $format)";
