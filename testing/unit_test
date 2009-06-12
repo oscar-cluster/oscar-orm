@@ -6,22 +6,35 @@ use OSCAR::RepositoryManager;
 use OSCAR::RepoCache;
 use warnings "all";
 
+print "= Testing the basic distro manager status...\n\n";
 my $rm = OSCAR::RepositoryManager->new (distro=>"ubuntu-7-i386");
 if (!defined $rm) {
     die "ERROR: Impossible to create a RepositoryManager object";
 }
 print $rm->status();
+print "\n\n";
 
+print "= Testing the repo's type detection mechanism...\n\n";
 my $repo_cache = OSCAR::RepoCache->new ();
 $repo_cache->print_cache();
+
 my $url = "http://bear.csm.ornl.gov/repos/unstable/debian-4-i386/+etch+/";
+print "\n== Detecting format of $url ==\n\n";
 my $f = $repo_cache->get_format($url);
+if (!defined $f) {
+    die "ERROR: Impossible to detect format of $url";
+}
 print "Format of the cache $url: $f\n";
 
 $url = "http://mirror.ovh.net/ftp.centos.org/5.3/os/i386/";
+print "\n== Detecting format of $url ==\n\n";
 $f = $repo_cache->get_format($url);
+if (!defined $f) {
+    die "ERROR: Impossible to detect format of $url";
+}
 print "Format of the cache $url: $f\n";
 
+print "\n== Print the current cache ==\n\n";
 $repo_cache->print_cache();
 
 exit 0;

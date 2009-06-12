@@ -113,6 +113,7 @@ sub get_format ($$) {
                 "$url $format\n", $self->{cache_file});
         } else {
             print "[INFO] $url is in cache\n" if $self->{verbose};
+            return $self->{cache}{$url};
         }
     } else {
         require OSCAR::PackageSmart;
