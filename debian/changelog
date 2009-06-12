@@ -1,8 +1,8 @@
-orm (1.4-1) hardy; urgency=low
+orm (1.4~svn20090612-0gv1) hardy; urgency=low
 
   * New upstream version.
 
- -- Geoffroy Vallee <valleegr@ornl.gov>  Wed, 03 Jun 2009 14:21:26 -0400
+ -- Geoffroy Vallee <valleegr@ornl.gov>  Fri, 12 Jun 2009 13:58:50 -0400
 
 orm (1.3-1) hardy; urgency=low
 
