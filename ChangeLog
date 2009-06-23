@@ -1,5 +1,7 @@
 1.4 (not yet released):
 - [Ticket #532] Implement a cache when detecting the format of repositories.
+- [Ticket #548] Fixes a bug in the cache management for repositories' formats
+which created the problem in the upper layers of the architecture. 
 
 1.3:
 - Revisit the non-interactive mode to center the capabilities around the
