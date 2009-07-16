@@ -43,7 +43,7 @@ sub new {
     my $cache_dir = File::Basename::dirname ($self->{cache_file});
     bless ($self, $class);
     if (! -d $cache_dir) {
-        print "[INFO] Creating the cache directory\n";
+#        print "[INFO] Creating the cache directory\n";
         File::Path::mkpath ($cache_dir) 
             or (carp "ERROR: Impossible to create $cache_dir",
                 return undef);
@@ -99,7 +99,7 @@ sub get_format ($$) {
     my $format;
 
     if (defined $self->{cache} > 0) {
-        print "[INFO] Cache existing\n";
+#        print "[INFO] Cache existing\n";
         if (!defined $self->{cache}{$url}) {
             require OSCAR::PackageSmart;
             print "[INFO] $url is not in cache\n" if $self->{verbose};

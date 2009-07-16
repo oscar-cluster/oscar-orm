@@ -1,6 +1,8 @@
 http://isoredirect.centos.org/centos/5.3/os/x86_64/ rpm
 http://isoredirect.centos.org/centos/5.3/os/i386/ rpm
 http://download.fedora.redhat.com/pub/fedora/linux/releases/9/Everything/i386/os/ rpm
+http://mirror.centos.org/centos/5.3/os/x86_64/ rpm
+http://mirror.centos.org/centos/5.3/os/i386/ rpm
 http://download.fedora.redhat.com/pub/fedora/linux/releases/9/Everything/x86_64/os/ rpm
 http://us.archive.ubuntu.com/ubuntu/+hardy+main+universe+multiverse deb
 http://us.archive.ubuntu.com/ubuntu/+hardy+main+universe+multiverse deb
