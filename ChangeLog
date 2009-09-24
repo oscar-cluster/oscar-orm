@@ -1,3 +1,6 @@
+1.4.1 (not yet released):
+- Fix the Debian copyright.
+
 1.4.0:
 - [Ticket #532] Implement a cache when detecting the format of repositories.
 - [Ticket #548] Fixes a bug in the cache management for repositories' formats
