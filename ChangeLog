@@ -1,5 +1,7 @@
 1.4.2 (not yet released):
 - Update the default cache data.
+- Better exception handling.
+- Improve output.
 
 1.4.1:
 - Fix the Debian copyright.
