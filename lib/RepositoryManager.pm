@@ -119,7 +119,8 @@ sub create_packman_object ($$) {
     }
     my $format = $rc->get_repos_format (@repos);
     if (!defined ($format)) {
-        carp "ERROR: Impossible to detect the binary format";
+        carp "ERROR: Impossible to detect the binary format (" .
+             join (", ", @repos).")";
         return -1;
     }
     $self->{format} = $format;
