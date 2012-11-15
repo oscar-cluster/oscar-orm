@@ -397,15 +397,19 @@ are possible).
 
 =item --help
 
-Some help information.
-
 =back
 
+Some help information.
+
 =head1 AUTHOR
+
+=over 8
 
 =item Geoffroy Vallee <valleegr@ornl.gov>
 
 =item Jeff Squyres
+
+=back
 
 =head1 SEE ALSO
 

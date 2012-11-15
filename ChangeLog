@@ -3,6 +3,7 @@
 O. Lahaye).
 - Update the spec file so it works in Scientific Linux 6.0 (patch from O.
 Lahaye).
+- Fix some problems with the manpage.
 
 1.4.2:
 - Update the default cache data.
