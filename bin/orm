@@ -186,6 +186,7 @@ sub main_menu {
 [o] omirror    - Mirror the OSCAR repository for the current distribution
 [m] dmirror    - Mirror the distribution's repository for the current distribution
 [q] quit       - Quit
+    chroot     - Path that must be used for the command. ORM will try to chroot into that path.
 R              - Select the specified package(s)
 
 N has an integer value
@@ -394,6 +395,10 @@ Gives the list of default OSCAR repos for the specified distribution (if the --d
 
 Linux distribution which should be used for queries (multiple --repo options 
 are possible).
+
+=item --chroot <PATH>
+
+Path that must be used for the command. ORM will try to chroot into that path.
 
 =item --help
 
