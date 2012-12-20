@@ -63,7 +63,7 @@ sub new {
     }
     if (!defined ($self->{pm})) {
         if ($self->create_packman_object ($self->{repo_cache})) {
-            print "ERROR: Impossible to associate a PackMan object";
+            die "ERROR: Impossible to associate a PackMan object";
         }
     }
 
@@ -151,7 +151,11 @@ sub create_packman_object ($$) {
         return -1;
     }
     $self->{pm}->repo (@repos);
-    $self->{pm}->distro ($self->{distro}) if (defined $self->{distro});
+    my $ret = $self->{pm}->distro ($self->{distro}) if (defined $self->{distro});
+    if ($ret != 1) {
+        carp "ERROR: Cannot detect the distro";
+        return -1;
+    }
 
     return 0;
 }
