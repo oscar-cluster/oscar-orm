@@ -4,6 +4,10 @@ O. Lahaye).
 - Update the spec file so it works in Scientific Linux 6.0 (patch from O.
 Lahaye).
 - Fix some problems with the manpage.
+- use MANDIR in Config.mk
+- Align man location to prefix location.(bin is in system bin dir, thus man is
+put in system man dir)
+- used rpm macros for locations. removed the need for sed for perl lib.
 
 1.4.2:
 - Update the default cache data.
