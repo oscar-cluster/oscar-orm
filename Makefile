@@ -2,8 +2,6 @@ DESTDIR=
 PKGDEST=
 PKG=orm
 
-include ./Config.mk
-
 SUBDIRS := bin lib etc
 
 all:
@@ -26,7 +24,7 @@ dist: clean
 	@mkdir -p /tmp/$(PKG)
 	@cp -rf * /tmp/$(PKG)
 	@cd /tmp/$(PKG); rm -rf `find . -name ".svn"`
-	@cd /tmp; tar czf $(PKG).tar.gz orm
+	@cd /tmp; tar czf $(PKG).tar.gz $(PKG)
 	@cp -f /tmp/$(PKG).tar.gz .
 	@rm -rf /tmp/$(PKG)/
 	@rm -f /tmp/$(PKG).tar.gz
