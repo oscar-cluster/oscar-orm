@@ -45,7 +45,7 @@ sub new {
             {distro=>$dist, distro_version=>$ver, arch=>$arch});
         my $drepo = OSCAR::PackagePath::distro_repo_url(os=>$os);
         my $orepo = OSCAR::PackagePath::oscar_repo_url(os=>$os);
-        if (!OSCAR::Utils::is_a_valid_string ($drepo)) {
+        if ($drepo ne "" and !OSCAR::Utils::is_a_valid_string ($drepo)) {
             die "ERROR: Impossible to get the distro repo(s) for ".
                 $self->{distro};
 	}
@@ -53,7 +53,8 @@ sub new {
             die "ERROR: Impossible to get the oscar repo for ".
                 $self->{distro};
         }
-        $self->{repos} = "$drepo,$orepo";
+        $self->{repos} = "$orepo";
+        $self->{repos} = "$drepo,$orepo" if $drepo ne "";
     }
     # Note that the cache for repositories' format should be initialized before
     # PackMan
