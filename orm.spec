@@ -1,7 +1,7 @@
 Summary:        OSCAR Repository Manager - ORM.
 Name:           orm
 Version:        1.4.3
-Release:        1
+Release:        2
 Vendor:         Open Cluster Group <http://OSCAR.OpenClusterGroup.org/>
 Distribution:   OSCAR
 Packager:       Geoffroy Vallee <valleegr@ornl.gov>
@@ -31,6 +31,9 @@ Set of scripts and Perl modules for the management of the OSCAR repositories.
 /var/lib/oscar/*
 
 %changelog
+* Thu Nov 28 2013 DongInn Kim <dikim@cs.indiana.edu> 1.4.3-2
+- New upstream version (see ChangeLog for more details).
+- Update the release number of a spec file to get the updated RepositoryManager.pm
 * Wed Nov 14 2012 Olivier Lahaye <olivier.lahaye@cea.fr> 1.4.3-1
 - New upstream version (see ChangeLog for more details).
 - Updated spec file with rpm macros for paths.
