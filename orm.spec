@@ -25,7 +25,7 @@ Set of scripts and Perl modules for the management of the OSCAR repositories.
 %files
 %defattr(-,root,root)
 %{_bindir}/*
-%{perl_vendorlib}/OSCAR
+%{perl_vendorlib}/OSCAR/*
 %{_mandir}/man1/*
 %{_sharedstatedir}/oscar
 
@@ -33,7 +33,7 @@ Set of scripts and Perl modules for the management of the OSCAR repositories.
 * Sat Dec 14 2013 Olivier Lahaye <olivier.lahaye@cea.fr> 1.4.3-4
 - Fix bad migration: /var/lib/oscar/cache is not in usr.
 - Removed AutoReqProv: no so we have correct requires and provides.
-- replaced %dir oscardir + oscardir/* by oscardir so we own the dir easilly
+- removed %dir %{perl_vendorlib}/OSCAR as we do now own it (conflict on fc-18+)
 * Mon Dec 02 2013 Olivier Lahaye <olivier.lahaye@cea.fr> 1.4.3-3
 - Migration from /var/lib/oscar/{package,testing} to /usr/lib/oscar (FHS)
 * Thu Nov 28 2013 DongInn Kim <dikim@cs.indiana.edu> 1.4.3-2
