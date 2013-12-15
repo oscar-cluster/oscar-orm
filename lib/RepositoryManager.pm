@@ -135,14 +135,14 @@ sub create_packman_object ($$) {
     $self->{format} = $format;
     if ($format eq "deb") {
         require OSCAR::PackMan;
-        $self->{pm} = PackMan::DEB->new;
+        $self->{pm} = OSCAR::PackMan::DEB->new;
         if (!defined $self->{pm}) {
             carp "ERROR: Impossible to create a PackMan object";
             return -1;
         }
     } elsif ($format eq "rpm") {
         require OSCAR::PackMan;
-        $self->{pm} = PackMan::RPM->new;
+        $self->{pm} = OSCAR::PackMan::RPM->new;
         if (!defined $self->{pm}) {
             carp "ERROR: Impossible to create a PackMan object";
             return -1;
