@@ -1,7 +1,7 @@
 Summary:        OSCAR Repository Manager - ORM.
 Name:           orm
 Version:        1.4.3
-Release:        3
+Release:        4
 Vendor:         Open Cluster Group <http://OSCAR.OpenClusterGroup.org/>
 Distribution:   OSCAR
 Packager:       Geoffroy Vallee <valleegr@ornl.gov>
@@ -10,7 +10,6 @@ Group:          Development/Libraries
 Source:         %{name}.tar.gz
 BuildRoot:      %{_localstatedir}/tmp/%{name}-root
 BuildArch:      noarch
-AutoReqProv: 	no
 Requires:       oscar-base-lib > 6.0.2
 Requires:       packman
 
@@ -26,11 +25,15 @@ Set of scripts and Perl modules for the management of the OSCAR repositories.
 %files
 %defattr(-,root,root)
 %{_bindir}/*
-%{perl_vendorlib}/*
+%{perl_vendorlib}/OSCAR
 %{_mandir}/man1/*
-/usr/lib/oscar/*
+%{_sharedstatedir}/oscar
 
 %changelog
+* Sat Dec 14 2013 Olivier Lahaye <olivier.lahaye@cea.fr> 1.4.3-4
+- Fix bad migration: /var/lib/oscar/cache is not in usr.
+- Removed AutoReqProv: no so we have correct requires and provides.
+- replaced %dir oscardir + oscardir/* by oscardir so we own the dir easilly
 * Mon Dec 02 2013 Olivier Lahaye <olivier.lahaye@cea.fr> 1.4.3-3
 - Migration from /var/lib/oscar/{package,testing} to /usr/lib/oscar (FHS)
 * Thu Nov 28 2013 DongInn Kim <dikim@cs.indiana.edu> 1.4.3-2
