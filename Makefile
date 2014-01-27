@@ -1,6 +1,7 @@
 DESTDIR=
 PKGDEST=
 PKG=orm
+VERSION=1.4.3
 
 SUBDIRS := bin lib etc
 
@@ -20,21 +21,22 @@ clean:
 	for dir in ${SUBDIRS} ; do ( cd $$dir ; ${MAKE} clean ) ; done
 
 dist: clean
-	@rm -rf /tmp/$(PKG)
-	@mkdir -p /tmp/$(PKG)
-	@cp -rf * /tmp/$(PKG)
-	@cd /tmp/$(PKG); rm -rf `find . -name ".svn"`
-	@cd /tmp; tar czf $(PKG).tar.gz $(PKG)
-	@cp -f /tmp/$(PKG).tar.gz .
-	@rm -rf /tmp/$(PKG)/
-	@rm -f /tmp/$(PKG).tar.gz
+	@rm -rf /tmp/$(PKG)-$(VERSION)
+	@mkdir -p /tmp/$(PKG)-$(VERSION)
+	@cp -rf * /tmp/$(PKG)-$(VERSION)
+	@cd /tmp/$(PKG)-$(VERSION); rm -rf `find . -name ".svn"`
+	@cd /tmp; tar czf $(PKG)-$(VERSION).tar.gz $(PKG)-$(VERSION)
+	@cp -f /tmp/$(PKG)-$(VERSION).tar.gz .
+	@rm -rf /tmp/$(PKG)-$(VERSION)/
+	@rm -f /tmp/$(PKG)-$(VERSION).tar.gz
 
 rpm: dist
-	cp $(PKG).tar.gz `rpm --eval '%_sourcedir'`
-	rpmbuild -bb ./$(PKG).spec
+	#cp $(PKG)-$(VERSION).tar.gz `rpm --eval '%_sourcedir'`
+	#rpmbuild -bb ./$(PKG).spec
+	rpmbuild -tb $(PKG)-$(VERSION).tar.gz
 	@if [ -n "$(PKGDEST)" ]; then \
-        mv `rpm --eval '%{_topdir}'`/RPMS/noarch/$(PKG)-*.noarch.rpm $(PKGDEST); \
-    fi
+            mv `rpm --eval '%{_topdir}'`/RPMS/noarch/$(PKG)-*.noarch.rpm $(PKGDEST); \
+        fi
 
 deb:
 	@if [ -n "$$UNSIGNED_OSCAR_PKG" ]; then \
