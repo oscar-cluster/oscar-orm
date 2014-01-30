@@ -52,7 +52,8 @@ clean:
 install: build
 	dh_testdir
 	dh_testroot
-	dh_clean -k 
+#	dh_clean -k # dh_clean -k is deprecated and replaced by dh_prep
+	dh_prep
 	dh_installdirs
 
 	# Add here commands to install the package into debian/orm.
