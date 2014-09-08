@@ -203,8 +203,8 @@ sub install_pkg ($$@) {
              "packages";
         return undef;
     }
-    print "Installing packages in $dest:\n";
-    OSCAR::Utils::print_array (@pkgs);
+    print "Installing packages in $dest:\n" . join(" ",@pkgs) . "\n";
+#    OSCAR::Utils::print_array (@pkgs);
     $self->{pm}->chroot($dest);
     print $self->status();
     return $self->{pm}->smart_install (@pkgs);
@@ -218,8 +218,8 @@ sub remove_pkg ($$@) {
              "packages";
         return undef;
     }
-    print "Removing packages from $dest:\n";
-    OSCAR::Utils::print_array (@pkgs);
+    print "Removing packages from $dest:\n" . join(" ",@pkgs) . "\n";
+#    OSCAR::Utils::print_array (@pkgs);
     $self->{pm}->chroot($dest);
     print $self->status();
     return $self->{pm}->smart_remove (@pkgs);
