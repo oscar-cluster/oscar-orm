@@ -12,6 +12,10 @@ BuildRoot:      %{_localstatedir}/tmp/%{name}-root
 BuildArch:      noarch
 Requires:       oscar-base-lib > 6.1.2
 Requires:       packman
+BuildRequires:	perl-interpreter
+BuildRequires:	perl-generators
+BuildRequires:	make
+BuildRequires:	perl(Pod::Man)
 
 %description
 Set of scripts and Perl modules for the management of the OSCAR repositories.
