@@ -1,3 +1,5 @@
+%define is_suse %(test -f /etc/SuSE-release && echo 1 || echo 0)
+
 Summary:        OSCAR Repository Manager - ORM.
 Name:           orm
 Version:        1.4.3
@@ -12,8 +14,18 @@ BuildRoot:      %{_localstatedir}/tmp/%{name}-root
 BuildArch:      noarch
 Requires:       oscar-base-lib > 6.1.2
 Requires:       packman
-BuildRequires:	perl-interpreter
-BuildRequires:	perl-generators
+%if 0%{?rhel} >= 6
+BuildRequires:  perl-interpreter
+BuildRequires:  perl-generators
+%endif
+%if 0%{?fedora} >= 25
+BuildRequires:  perl-interpreter
+BuildRequires:  perl-generators
+%endif
+%if 0%{?is_suse}%{?is_opensuse}
+BuildRequires:  perl
+BuildRequires:  rpm
+%endif
 BuildRequires:	make
 BuildRequires:	perl(Pod::Man)
 
