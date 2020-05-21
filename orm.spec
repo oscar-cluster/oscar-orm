@@ -14,17 +14,11 @@ BuildRoot:      %{_localstatedir}/tmp/%{name}-root
 BuildArch:      noarch
 Requires:       oscar-base-lib > 6.1.2
 Requires:       packman
-%if 0%{?rhel} >= 6
-BuildRequires:  perl-interpreter
-BuildRequires:  perl-generators
-%endif
-%if 0%{?fedora} >= 25
-BuildRequires:  perl-interpreter
-BuildRequires:  perl-generators
+%if 0%{?fedora} >= 16 || 0%{?rhel} >= 6
+BuildRequires:  perl-generators, perl-interpreter
 %endif
 %if 0%{?is_suse}%{?is_opensuse}
-BuildRequires:  perl
-BuildRequires:  rpm
+BuildRequires:  rpm, perl
 %endif
 BuildRequires:	make
 BuildRequires:	perl(Pod::Man)
