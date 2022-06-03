@@ -1,12 +1,12 @@
 Source: orm
-Section: oscar
+Section: science
 Priority: optional
-Maintainer: Geoffroy Vallee <valleegr@ornl.gov>
+Maintainer: Olivier Lahaye <olivier.lahaye@cea.fr>
 Build-Depends: debhelper (>= 4.0.0)
 Standards-Version: 3.7.2
 
 Package: orm
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, liboscar (> 6.0.2), packman
+Depends: ${shlibs:Depends}, ${misc:Depends}, liboscar-server (> 6.1.2), packman
 Description: OSCAR Repository Manager
  Set of scripts and Perl modules for the management of the OSCAR repositories.
