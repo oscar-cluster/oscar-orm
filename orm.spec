@@ -13,7 +13,7 @@ Group:          Development/Libraries
 Source:         %{name}-%{version}.tar.gz
 BuildRoot:      %{_localstatedir}/tmp/%{name}-root
 BuildArch:      noarch
-Requires:       oscar-base-lib > 6.1.2
+Requires:       liboscar-server >= 6.3
 Requires:       packman
 %if 0%{?fedora} >= 16 || 0%{?rhel} >= 6
 BuildRequires:  perl-generators, perl-interpreter
