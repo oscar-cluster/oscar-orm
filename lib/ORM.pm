@@ -422,7 +422,7 @@ sub get_available_opkgs ($) {
         while (<CMD>) {
             my $opkg = $_;
             chomp ($opkg);
-            if ($opkg =~ m/^opkg-(.*)-server\s*$/) {
+            if ($opkg =~ m/^opkg-(.*)-server.*$/) {
                 push (@list, $1);
             }
         }
