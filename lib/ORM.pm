@@ -413,7 +413,7 @@ sub get_available_opkgs ($) {
             # This is a Debian repository
             $cmd="/usr/bin/rapt --repo $repo_url search 'opkg-.*-server' --names-only ";
         } elsif ($repo_type eq "yum") {
-            $cmd="/usr/bin/yume $repo_url --repoquery --nevra opkg-*-server";
+            $cmd="/usr/bin/yume --repo $repo_url --repoquery --nevra opkg-*-server";
         } else {
             die "ERROR: unknown repository type ($repo_type)\n";
         }
