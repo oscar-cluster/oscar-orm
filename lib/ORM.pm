@@ -20,6 +20,7 @@ package OSCAR::ORM;
 
 use strict;
 use XML::Simple;
+use File::Path qw( make_path );
 use Data::Dumper;
 use OSCAR::Utils;
 use OSCAR::PackagePath; 
@@ -50,7 +51,10 @@ my $opkg_repo_cache = $cachedir . "opd_repos.txt";
 my $opkg_list_cache = $cachedir . "opkgs.txt";
 our @opkg_list;
 
-my $opd2_lockfile = "/tmp/opd2.pid";
+my $opd2_lockfile = "/var/run/lock/orm/opd2.pid";
+if ( !-d "/var/run/lock/orm" ){
+	make_path "/var/run/lock/orm" or die "Failed to create path for opd2 lock file";
+}
 
 # List of OSCAR repositories used by default, using the yume or rapt syntax
 my $os = OSCAR::OCA::OS_Detect::open();
