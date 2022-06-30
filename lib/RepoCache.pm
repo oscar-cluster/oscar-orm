@@ -37,13 +37,13 @@ sub new {
     my $self = {
         cache_file => '/var/lib/oscar/cache/repoCache.txt',
         cache => undef,
-        verbose => 1,
+        verbosity => 1,
         @_,
     };
     my $cache_dir = File::Basename::dirname ($self->{cache_file});
     bless ($self, $class);
     if (! -d $cache_dir) {
-#        print "[INFO] Creating the cache directory\n";
+        print "[INFO] Creating the cache directory\n" if( $self->{verbosity} >= 10 );
         File::Path::mkpath ($cache_dir) 
             or (carp "ERROR: Impossible to create $cache_dir",
                 return undef);
@@ -81,14 +81,14 @@ sub load_cache ($) {
 sub print_cache ($) {
     my $self = shift;
 
-    print "Repositories' format cache:\n" if $self->{verbose};
+    print "Repositories' format cache:\n" if($self->{verbosity} >=1);
     if (defined $self->{cache}) {
         my $hash_ref = $self->{cache};
         foreach my $k (keys (%$hash_ref)) {
             print $k . " " . $self->{cache}{$k} . "\n";
         }
     } else {
-        print "Cache empty\n" if $self->{verbose};
+        print "Cache empty\n" if($self->{verbosity} >= 1)};
     }
 
     return 0;
@@ -102,7 +102,7 @@ sub get_format ($$) {
 #        print "[INFO] Cache existing\n";
         if (!defined $self->{cache}{$url}) {
             require OSCAR::PackageSmart;
-            print "[INFO] $url is not in cache\n" if $self->{verbose};
+            print "[INFO] $url is not in cache\n" if($self->{verbosity} >= 5);
             $format = OSCAR::PackageSmart::detect_pools_format ($url);
             if (!defined ($format)) {
                 carp "ERROR: Impossible to detect the format of the $url repo";
@@ -112,12 +112,12 @@ sub get_format ($$) {
             OSCAR::FileUtils::add_line_to_file_without_duplication (
                 "$url $format\n", $self->{cache_file});
         } else {
-            print "[INFO] $url is in cache\n" if $self->{verbose};
+            print "[INFO] $url is in cache\n" if($self->{verbosity} >= 5);
             return $self->{cache}{$url};
         }
     } else {
         require OSCAR::PackageSmart;
-        print "[INFO] Cache empty, populating...\n" if $self->{verbose};
+        print "[INFO] Cache empty, populating...\n" if($self->{verbosity} >= 5);
         $format = OSCAR::PackageSmart::detect_pools_format ($url);
         if (!defined ($format)) {
             carp "ERROR: Impossible to detect the format of the $url repo";

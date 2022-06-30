@@ -61,7 +61,7 @@ sub new {
     # PackMan
     if (!defined ($self->{repo_cache})) {
         require OSCAR::RepoCache;
-        $self->{repo_cache} = OSCAR::RepoCache->new();
+	$self->{repo_cache} = OSCAR::RepoCache->new( verbosity => $self->{verbosity});
     }
     if (!defined ($self->{pm})) {
         if ($self->create_packman_object ($self->{repo_cache})) {

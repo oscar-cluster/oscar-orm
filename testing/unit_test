@@ -7,7 +7,7 @@ use OSCAR::RepoCache;
 use warnings "all";
 
 print "= Testing the basic distro manager status...\n\n";
-my $rm = OSCAR::RepositoryManager->new (distro=>"ubuntu-7-i386");
+my $rm = OSCAR::RepositoryManager->new (distro=>"almalinux-8-x86_64", verbosity => 10);
 if (!defined $rm) {
     die "ERROR: Impossible to create a RepositoryManager object";
 }
@@ -15,7 +15,7 @@ print $rm->status();
 print "\n\n";
 
 print "= Testing the repo's type detection mechanism...\n\n";
-my $repo_cache = OSCAR::RepoCache->new ();
+my $repo_cache = OSCAR::RepoCache->new ( verbosity => 10);
 $repo_cache->print_cache();
 
 my $url = "http://bear.csm.ornl.gov/repos/unstable/debian-4-i386/+etch+/";
