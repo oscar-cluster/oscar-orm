@@ -27,6 +27,7 @@ sub new {
         format => undef,
         repo_cache => undef,
         pm => undef,
+	verbosity => 0,
         @_,
     };
     bless ($self, $class);
@@ -69,6 +70,18 @@ sub new {
     }
 
     return $self;
+}
+
+sub set_verbosity ($$) {
+    my $self = shift;
+    my $verbosity = shift;
+    die "ERROR: undefined vermovity." if(! defined $verbosity);
+    if ($verbosity >= 0 && $verbosity <= 10) {
+        $self->{verbosity} = $verbosity;
+    } else {
+        warn "verbosity must be within 0..10 range.";
+	$self->{verbosity} = 10;
+    }
 }
 
 # Returns the list of repos for the current object. In order of preference:
@@ -203,10 +216,12 @@ sub install_pkg ($$@) {
              "packages";
         return undef;
     }
-    print "Installing packages in $dest:\n" . join(" ",@pkgs) . "\n";
+    print "Installing packages in $dest: " . join(" ",@pkgs) . "\n"
+        if ($self->{verbosity} >= 1);
 #    OSCAR::Utils::print_array (@pkgs);
     $self->{pm}->chroot($dest);
-    print $self->status();
+    print $self->status()
+        if ($self->{verbosity} >= 10);
     return $self->{pm}->smart_install (@pkgs);
 }
 
@@ -218,10 +233,12 @@ sub remove_pkg ($$@) {
              "packages";
         return undef;
     }
-    print "Removing packages from $dest:\n" . join(" ",@pkgs) . "\n";
+    print "Removing packages from $dest:\n" . join(" ",@pkgs) . "\n"
+        if ($self->{verbosity} >= 1);
 #    OSCAR::Utils::print_array (@pkgs);
     $self->{pm}->chroot($dest);
-    print $self->status();
+    print $self->status()
+        if ($self->{verbosity} >= 10);
     return $self->{pm}->smart_remove (@pkgs);
 }    
 
