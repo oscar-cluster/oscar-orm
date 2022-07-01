@@ -81,14 +81,16 @@ sub load_cache ($) {
 sub print_cache ($) {
     my $self = shift;
 
-    print "Repositories' format cache:\n" if($self->{verbosity} >=1);
+    return 0 if($self->{verbosity} == 0); # Do nothing in quiet mode.
+
+    print "Repositories' format cache:\n";
     if (defined $self->{cache}) {
         my $hash_ref = $self->{cache};
         foreach my $k (keys (%$hash_ref)) {
             print $k . " " . $self->{cache}{$k} . "\n";
         }
     } else {
-        print "Cache empty\n" if($self->{verbosity} >= 1)};
+        print "Cache empty!\n";
     }
 
     return 0;
