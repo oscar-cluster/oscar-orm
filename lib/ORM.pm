@@ -250,10 +250,11 @@ sub add_opkg_to_cache {
 	            if ($repo_type eq "apt" && -f "/etc/apt/sources.list") {
 	                add_apt_repo ($repo_uri);
 	            }
-	            if ($repo_type eq "yum" && -f "/etc/yum.conf") {
+	            if (($repo_type eq "yum" && -f "/etc/yum.conf") ||
+                        ($repo_type eq "yum" && -f "/etc/dnf/dnf.conf")) {
 	                add_yum_repo ($repo_uri);
 	            }
-			}
+            }
         }
     }
     close (CACHEFILE);
