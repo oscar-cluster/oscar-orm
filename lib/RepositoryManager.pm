@@ -79,7 +79,7 @@ sub set_verbosity ($$) {
     if ($verbosity >= 0 && $verbosity <= 10) {
         $self->{verbosity} = $verbosity;
     } else {
-        warn "verbosity must be within 0..10 range.";
+        warn "verbosity must be within 0..10 range. Assuming verbosity=10.";
 	$self->{verbosity} = 10;
     }
 }
@@ -211,34 +211,40 @@ sub show_opkg ($$) {
 sub install_pkg ($$@) {
     my ($self, $dest, @pkgs) = @_;
 
+    my $dest_msg = "on system";
+    $dest_msg = "in image $dest" if ($dest ne '/');
+
     if (!defined $dest || ! -d File::Basename::dirname ($dest)) {
-        carp "ERROR: Invalid destination ($dest), impossible to install ".
-             "packages";
+        carp "ERROR: Invalid destination ($dest), can't install packages";
         return undef;
     }
-    print "Installing packages in $dest: " . join(" ",@pkgs) . "\n"
+    print "Installing packages $dest_msg: " . join(" ",@pkgs) . "\n"
         if ($self->{verbosity} >= 1);
-#    OSCAR::Utils::print_array (@pkgs);
+
     $self->{pm}->chroot($dest);
-    print $self->status()
-        if ($self->{verbosity} >= 10);
+
+    print $self->status() if ($self->{verbosity} >= 10);
+
     return $self->{pm}->smart_install (@pkgs);
 }
 
 sub remove_pkg ($$@) {
     my ($self, $dest, @pkgs) = @_;
 
+    my $dest_msg = "system";
+    $dest_msg = "image $dest" if ($dest ne '/');
+
     if (!defined $dest || ! -d File::Basename::dirname ($dest)) {
-        carp "ERROR: Invalid destination ($dest), impossible to install ".
-             "packages";
+        carp "ERROR: Invalid destination ($dest), can't remove packages";
         return undef;
     }
-    print "Removing packages from $dest:\n" . join(" ",@pkgs) . "\n"
+    print "Removing packages from $dest_msg: " . join(" ",@pkgs) . "\n"
         if ($self->{verbosity} >= 1);
-#    OSCAR::Utils::print_array (@pkgs);
+
     $self->{pm}->chroot($dest);
-    print $self->status()
-        if ($self->{verbosity} >= 10);
+
+    print $self->status() if ($self->{verbosity} >= 10);
+
     return $self->{pm}->smart_remove (@pkgs);
 }    
 
