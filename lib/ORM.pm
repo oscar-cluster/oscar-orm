@@ -25,6 +25,7 @@ use Data::Dumper;
 use OSCAR::Utils;
 use OSCAR::PackagePath; 
 use OSCAR::OCA::OS_Detect;
+use OSCAR::Env;
 use Carp;
 
 use vars qw($VERSION @EXPORT);
@@ -64,7 +65,7 @@ my @default_oscar_repos;
 my $r = OSCAR::PackagePath::get_default_oscar_repo ($distro);
 push (@default_oscar_repos, $r);
 
-my $verbose = $ENV{OPD_VERBOSE};
+my $verbose = $OSCAR::Env::oscar_verbose if (defined $OSCAR::Env::oscar_verbose);
 our $xml_data;
 #our $url;
 
@@ -110,7 +111,7 @@ sub init_cachedir {
 # This function initialized the files used for caching.
 # @return: 0 if success, -1 else
 sub init_cachefiles {
-    print "Cache initialization...\n" if $verbose > 0;
+    print "Initializing ORM cache...\n" if $verbose >= 5;
     if (! -f $opkg_list_cache) {
         if (init_text_file ($opkg_list_cache)) {
             carp ("Impossible to initialize cache ($opkg_list_cache)");
@@ -121,78 +122,79 @@ sub init_cachefiles {
             carp ("Impossible to initialize cache ($opkg_repo_cache)");
         }
     }
-    print "Initialization done.\n" if $verbose > 0;
+    print "ORM Cache initilized.\n" if $verbose > 0;
     return 0;
 }
 
 # Create the OPD2 lock
 # @return: 0 if success
 sub opd2_lock {
-    print "Locking OPD2\n" if $verbose > 0;
+    print "Locking OPD2\n" if $verbose >= 5;
     if (-f $opd2_lockfile) {
         carp ("The OPD2 lock already exists ($opd2_lockfile), " .
-            "check if another instance is running") if $verbose;
+            "check if another instance is running") if $verbose > 0;
         return -1;
     }
     open (FILE, ">$opd2_lockfile") or die "can't open $opd2_lockfile";
     print FILE $$;
     close (FILE);
-    print "OPD2 locked\n" if $verbose > 0;
+    print "OPD2 locked\n" if $verbose >= 5;
     return 0;
 }
 
 # Remove the OPD2 lock
 sub opd2_unlock {
-    print "Unlocking OPD2\n" if $verbose > 0;
+    print "Unlocking OPD2\n" if $verbose >= 5;
     if (! -f $opd2_lockfile) {
         print "Warning the lock does not exist, is it not normal." .
               "Continuing anyway.\n";
     } else {
         unlink ("$opd2_lockfile");
+	print "OPD2 ulocked\n" if $verbose >= 5;
     }
 }
 
 # Check if a given OPKG is cached or not
 sub find_opkg_in_cache {
     my $pkg_name = shift;
-    print "Searching OPKG $pkg_name in cache...\n" if $verbose > 0;
+    print "Searching OPKG $pkg_name in cache...\n" if $verbose >= 5;
     open (FILE, $opkg_list_cache)
         or die "Impossible to add the list of OPKGs to the cache";
     my $pkg;
     my $pos=0;
     foreach $pkg (<FILE>) {
         chomp($pkg);
-        print $pkg if $verbose > 2;
+	# print $pkg if $verbose >= 5;
         if ($pkg eq $pkg_name) {
-            print "The OPKG ($pkg_name) is already cached\n" if $verbose;
+            print "The OPKG ($pkg_name) is already cached\n" if $verbose >= 5;
             return $pos;
         }
         $pos += 1;
     }
     close (FILE);
-    print "OPKG ($pkg_name) not in cache\n" if $verbose > 0;
+    print "OPKG ($pkg_name) not in cache\n" if $verbose >= 5;
     return -1;
 }
 
 # Check if a given repository is cached or not
 sub find_repo_in_cache ($) {
     my $url = shift;
-    print "Searching repo $url in cache...\n" if $verbose > 0;
+    print "Searching repo $url in cache...\n" if $verbose >=5;
     open (FILE, $opkg_repo_cache)
         or die "Impossible to add the repo to the cache";
     my $repo;
     my $pos=0;
     foreach $repo (<FILE>) {
         chomp($repo);
-        print $repo if $verbose > 2;
+	# print $repo if $verbose >= 5;
         if ($repo eq $url) {
-            print "The repo ($repo) is already cached\n" if $verbose;
+            print "The repo ($repo) is already cached\n" if $verbose >= 5;
             return $pos;
         } 
         $pos += 1;
     }
     close (FILE);
-    print "Repo ($url) not in cache\n" if $verbose > 0;
+    print "Repo ($url) not in cache\n" if $verbose > 5;
     return -1;
 }
 
@@ -291,7 +293,7 @@ sub add_opkg_to_cache {
 
 sub init_repos {
     foreach my $repo (@default_oscar_repos) {
-        print "Adding the default repository $repo...\n" if $verbose;
+        print "Adding the default repository $repo...\n" if $verbose > 0;
         add_repo_to_cache ($repo);
     }
 }
